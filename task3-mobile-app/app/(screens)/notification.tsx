@@ -3,6 +3,7 @@ import SearchBar from "@/components/ui/search-bar";
 import { NotificationItem } from "@/data/notifications";
 import { useDebounce } from "@/hooks/debounce";
 import { fetchNotifications } from "@/utils/functions";
+import { Ionicons } from "@expo/vector-icons";
 import { useEffect, useRef, useState } from "react";
 import {
   ActivityIndicator,
@@ -45,14 +46,19 @@ const NotificationsScreen = () => {
       if (reset) {
         setData(result);
         setHasMore(result.length >= PAGE_SIZE);
+        setPage(1);
       } else {
-        setData((prev) => [...prev, ...result]);
+        setData((prev) => {
+          const newItems = result.filter(
+            (newItem) => !prev.some((oldItem) => oldItem.id === newItem.id),
+          );
+          return [...prev, ...newItems];
+        });
         if (result.length < PAGE_SIZE) {
           setHasMore(false);
         }
+        setPage((p) => p + 1);
       }
-
-      setPage(nextPage + 1);
     } catch (error) {
       console.error(error);
     } finally {
@@ -79,8 +85,29 @@ const NotificationsScreen = () => {
     </View>
   );
 
+  const renderEmpty = () => {
+    if (loading && data.length === 0) return null;
+
+    return (
+      <View style={styles.emptyContainer}>
+        <View style={styles.emptyIconCircle}>
+          <Ionicons name="notifications" size={32} color="#6B7280" />
+        </View>
+        <Text style={styles.emptyTitle}>
+          {search ? "No results found" : "No notifications yet"}
+        </Text>
+        <Text style={styles.emptySubtitle}>
+          {search
+            ? `We couldn't find any notifications matching "${search}"`
+            : "When you receive notifications, they will appear here."}
+        </Text>
+      </View>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container} edges={["top"]}>
+      {renderHeader()}
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -91,7 +118,7 @@ const NotificationsScreen = () => {
         removeClippedSubviews={true}
         maxToRenderPerBatch={10}
         updateCellsBatchingPeriod={50}
-        ListHeaderComponent={renderHeader}
+        ListEmptyComponent={renderEmpty}
         renderItem={({ item }) => <NotificationRow item={item} />}
         ListFooterComponent={
           loading ? (
@@ -102,7 +129,10 @@ const NotificationsScreen = () => {
             />
           ) : null
         }
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[
+          styles.listContent,
+          data.length === 0 && !loading && { flex: 1 },
+        ]}
       />
     </SafeAreaView>
   );
@@ -132,9 +162,39 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingBottom: 20,
+    flexGrow: 1,
   },
   loader: {
     marginVertical: 16,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 32,
+    paddingBottom: 80, // Offset to account for fixed header layout
+  },
+  emptyIconCircle: {
+    width: 64,
+    height: 64,
+    borderRadius: 32,
+    backgroundColor: "#F3F4F6",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 16,
+  },
+  emptyTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    color: "#111827",
+    marginBottom: 8,
+    textAlign: "center",
+  },
+  emptySubtitle: {
+    fontSize: 14,
+    color: "#6B7280",
+    textAlign: "center",
+    lineHeight: 20,
   },
 });
 
