@@ -12,46 +12,58 @@ Before you begin, ensure you have met the following requirements:
 
 ## Installation
 
-1.  **Clone the repository:**
+1. **Navigate to the project folder:**
 
-    ```bash
-    git clone https://github.com/abideen1052/ivory-not.git
-    cd ivory-not
-    ```
+   ```bash
+   cd task3-mobile-app
+   ```
 
-2.  **Install dependencies:**
-
-    ```bash
-    npm install
-    # or
-    yarn install
-    ```
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+   or
+   ```bash
+   yarn install
+   ```
 
 ## Running the App
 
-1.  **Start the development server:**
+1. **Start the development server:**
 
-    ```bash
-    npm start
-    ```
+   ```bash
+   npm start
+   ```
 
-2.  **Run on a specific platform:**
-    - **Android Emulator/Device:**
+2. **Run on a specific platform:**
+   - **Android Emulator/Device:**
 
-      ```bash
-      npm run android
-      ```
+     ```bash
+     npm run android
+     ```
 
-      _Make sure you have an Android Emulator running or a physical device connected via USB with debugging enabled._
+     _Make sure you have an Android Emulator running or a physical device connected via USB with debugging enabled._
 
-    - **iOS Simulator (macOS only):**
+   - **iOS Simulator (macOS only):**
+     ```bash
+     npm run ios
+     ```
+     _Requires Xcode installed._
 
-      ```bash
-      npm run ios
-      ```
+3. **Using Expo Go (Physical Device):**
+   - Start the server with `npm start`.
+   - Scan the QR code displayed in the terminal using the Expo Go app (Android) or the Camera app (iOS).
 
-      _Requires Xcode installed._
+## Features
 
-3.  **Using Expo Go (Physical Device):**
-    - Start the server with `npm start`.
-    - Scan the QR code displayed in the terminal using the Expo Go app (Android) or the Camera app (iOS).
+- 📱 High-performance notification feed
+- 🔍 Search functionality for finding notifications
+- ⚡ Optimized list rendering for smooth performance
+- 🎨 Clean and intuitive user interface
+- 📲 Cross-platform compatibility (iOS & Android)
+
+## Tech Stack
+
+- React Native
+- Expo
+- JavaScript
